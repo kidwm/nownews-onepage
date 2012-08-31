@@ -35,7 +35,10 @@ function fetch() {
     var request = this;
     if (request.readyState === 4) {
         if (request.status === 200) {
-            var data = request.responseText.replace(/iframe/g, 'video'); // save the iframe for youtube video
+            /* save the iframe for youtube video */
+            var data = request.responseText.replace(/iframe/g, 'video');
+            /* restore image src changed by mod_pagespeed lazy load */
+            data = data.replace(/pagespeed_lazy_src/g, 'src');
             self.postMessage(data);
         }
     }
@@ -51,8 +54,10 @@ self.port.on('photo', function(data){
 
 function shave(data) {
     var content = document.createElement('div');
-    content.innerHTML = data.replace(/%20/g, ''); // fix space char like %20http in img src after parser
-    var iframes = content.querySelectorAll('video'); // restore iframe
+    /* fix space char like %20http in img src after parser */
+    content.innerHTML = data.replace(/%20/g, '');
+    /* restore iframe */
+    var iframes = content.querySelectorAll('video');
     for (var i = 0; i < iframes.length; ++i) {
         var iframe = iframes[i];
         iframe.insertAdjacentHTML('beforebegin', '<iframe width="' +
@@ -79,7 +84,7 @@ function shave(data) {
     }
     result[position - 1] = content.innerHTML;
     if (result.indexOf('null') < 0) {
-       render(); 
+       render();
     }
 }
 
