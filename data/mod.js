@@ -49,7 +49,14 @@ self.port.on('photo', function(data){
     document.getElementById("reporter_info").nextElementSibling.innerHTML = '<div class="story_photo">' + data + '<div>';
     var target = document.querySelector('div.story_photo');
     target.style.display = 'block';
-    target.querySelector('img').setAttribute('src', target.querySelector('img').getAttribute('rel'));
+    
+    [].forEach.call(
+      target.querySelectorAll('img'), 
+      function(el) {
+        el.setAttribute('src', el.getAttribute('rel'));
+      }
+    );
+
 });
 
 function shave(data) {
