@@ -1,9 +1,9 @@
 {
-    "name": "nownews-onepage", 
-    "license": "MPL 2.0", 
-    "author": "kidwm", 
-    "version": "0.4.5",
-    "fullName": "NOWnews OnePage", 
-    "id": "jid0-h2HEbgAUBAEWqL3snP7pqJddo4c", 
-    "description": "Make NOWnews articles displayed in one page."
+	"name": "nownews-onepage",
+	"license": "MPL 2.0",
+	"author": "kidwm",
+	"version": "0.5.0",
+	"title": "NOWnews OnePage",
+	"id": "jid0-h2HEbgAUBAEWqL3snP7pqJddo4c@jetpack",
+	"description": "Make NOWnews articles displayed in one page."
 }

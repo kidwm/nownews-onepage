@@ -1,20 +1,13 @@
 if (document.getElementById('news_nav')) {
 
-    /* remove the next page link */
-    var node = document.querySelector('span.news_next');
-    if (node && node.parentNode) {
-        node.parentNode.removeChild(node);
-    }
-    
-    /* modify the page title and get the total pages */
-    var reg = /\(第\d+頁\/共(\d+)頁\)/;
-    var total = document.title.match(reg)[1];
-    document.title = document.title.replace(reg, '');
-    
     var target = document.getElementById('news_nav');
     var targets = target.querySelectorAll('a');
-    var index = target.querySelector('span.current').textContent;
-    target.style.display = 'none';
+    var index = parseInt(target.querySelector('span.current').textContent, 10);
+    
+    /* modify the page title and get the total pages */
+    document.title = document.title.replace(/第\d+頁\s\|\s/, '');
+    var total = target.querySelector('a[rel="prev"]') && target.querySelector('a[rel="next"]') ? targets.length - 1 : targets.length;
+
     var result = new Array(total);
     for (var i = 0; i < total; i++) {
         result[i] = 'null';
@@ -25,7 +18,7 @@ if (document.getElementById('news_nav')) {
             var request = new XMLHttpRequest();
             request.onreadystatechange = fetch;
             request.open('GET', targets[i].href, true);
-            request.overrideMimeType('text/html; charset=big5');
+            // request.overrideMimeType('text/html; charset=big5');
             request.send(null);
         }
     }
@@ -45,19 +38,6 @@ function fetch() {
 }
 
 self.on('message', function(data){ shave(data); });
-self.port.on('photo', function(data){
-    document.getElementById("reporter_info").nextElementSibling.innerHTML = '<div class="story_photo">' + data + '<div>';
-    var target = document.querySelector('div.story_photo');
-    target.style.display = 'block';
-    
-    [].forEach.call(
-      target.querySelectorAll('img'), 
-      function(el) {
-        el.setAttribute('src', el.getAttribute('rel'));
-      }
-    );
-
-});
 
 function shave(data) {
     var content = document.createElement('div');
@@ -76,7 +56,7 @@ function shave(data) {
         '" frameborder="0" allowfullscreen></iframe>');
         iframe.parentNode.removeChild(iframe);
     }
-    var position = content.querySelector('#news_nav > span.current').textContent;
+    var position = parseInt(content.querySelector('#news_nav > span.current').textContent, 10);
     node = content.querySelector("span.news_next");
     if (node && node.parentNode) {
         node.parentNode.removeChild(node);
@@ -102,4 +82,5 @@ function render() {
     for (var i = index; i < total; i++) {
         document.getElementById('news_nav').insertAdjacentHTML('beforebegin', result[i]);
     }
+    target.style.display = 'none';
 }
